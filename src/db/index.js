@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import { DB_Name } from "../constants.js";
+const DB_Name = require("../constants.js")
+const mongoose =require("mongoose")
 // import { SignupUsersSchema } from "../models/signupusers.modesl.js";
-import SignupSchema from "../models/signupusers.modesl.js";
+// import SignupSchema from "../models/signupusers.modesl.js";
 // const signupSchema=new mongoose.Schema(
 //     {
 //         // fname:{
@@ -33,7 +33,7 @@ const MRI=" mongodb://127.0.0.1:27017/"
 const connectDB = async (data)=>{
     const newData=data;
     try{
-const conectionInstance=await mongoose.connect(`${MRI}/${DB_Name}`)
+const conectionInstance=await mongoose.connect(`${process.env.MONGODB_URI}/${DB_Name}`)
 console.log("mongodb connected Succefully")
 // console.log(conectionInstance.connection.host)  
 console.log("data",data)
@@ -49,5 +49,5 @@ catch(error){
 
 
 
-export const SignupUser=mongoose.model("signupUser",SignupSchema);
-export default connectDB
+// export const SignupUser=mongoose.model("signupUser",SignupSchema);
+module.exports = connectDB

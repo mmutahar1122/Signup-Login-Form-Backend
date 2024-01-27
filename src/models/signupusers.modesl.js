@@ -1,4 +1,6 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+
 
 const SignupSchema = new mongoose.Schema(
     {
@@ -21,4 +23,25 @@ const SignupSchema = new mongoose.Schema(
     },
     {timestamps : true})
 
-    export default SignupSchema
+const SECRET_KEY = "myfirst-jwt-Token";
+
+
+SignupSchema.methods.generateToken = async function() {
+        try {
+          const token = jwt.sign({
+            userId: this._id,
+            email: this.email
+          }, SECRET_KEY, {
+            expiresIn: "30d" 
+          });
+          return token;
+        } catch (error) {
+          console.error("-=-=error-==-", error);
+          throw error; 
+        }
+      };
+      
+      const SignupUser = mongoose.model("signupUser", SignupSchema);
+
+
+    module.exports = SignupUser
