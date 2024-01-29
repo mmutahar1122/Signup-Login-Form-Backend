@@ -10,26 +10,34 @@ const SignUp = async (req, res) => {
     }
 }
 
-const PostData = async (req, res) => {
+const SignupUsers = async (req, res) => {
 
     try {
-        console.log(req.body)
+
+        // console.log("--PostData--", req.body)
+        const { fname, lname, email, password } = req.body
         const userExist = await SignupUser.findOne({ email });
+        // console.log("--userExist--", userExist)
 
         if (userExist) {
+
             return res.status(400).json("email already exist");
         }
         const saltRound = 10;
 
         const password_hash = await bcrypt.hash(password, saltRound);
 
+        // console.log("--password_hash--", password_hash);
+
+
         const data = await SignupUser.create({ fname, lname, email, password: password_hash })
+        // console.log("--data--", data);
 
         return res.status(200).json({ data, token: await data.generateToken(), userId: data._id })
 
     } catch (error) {
 
-        res.status(500).json("internal server error")
+        res.status(500).json("internal server error");
     }
 
     res.json({
@@ -59,11 +67,12 @@ const Login = async (req, res) => {
             res.status(401).send("invalid email or password");
         }
     } catch (error) {
-        console.log(error)
+        console.log(error);
+
     }
 }
 
 
 
 
-module.exports = { SignUp, PostData, Login };
+module.exports = { SignUp, SignupUsers, Login };
